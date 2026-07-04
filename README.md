@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ClaudeHud 🖥️
 
 > Claude Code 的增强状态栏 HUD — 实时显示模型、Token 使用量和上下文窗口状态。
