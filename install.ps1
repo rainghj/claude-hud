@@ -22,7 +22,7 @@ param(
 
 # --- Config ---
 $ClaudeDir = Join-Path $env:USERPROFILE ".claude"
-$SettingsFile = Join-Path $ClaudeDir "settings.local.json"
+$SettingsFile = Join-Path $ClaudeDir "settings.json"
 $TargetScript = Join-Path $ClaudeDir "claude-hud.sh"
 $SourceScript = Join-Path $PSScriptRoot "claude-hud.sh"
 # Unix-style path for Git Bash (Claude Code 在 Windows 也跑在 Git Bash 中)
@@ -101,14 +101,14 @@ function Install-Hud {
     Copy-Item $SourceScript $TargetScript -Force
     Write-Color "  OK: Installed to $TargetScript" "Green"
 
-    Write-Color "[2/3] Configuring settings.local.json..." "Yellow"
+    Write-Color "[2/3] Configuring settings.json..." "Yellow"
     $command = "bash $TargetScriptUnix"
 
     if (Test-Path $SettingsFile) {
         try {
             $s = Get-Content $SettingsFile -Raw | ConvertFrom-Json
             if ($null -ne $s.statusLine) {
-                Write-Color "  WARN: statusLine already exists in settings.local.json" "Yellow"
+                Write-Color "  WARN: statusLine already exists in settings.json" "Yellow"
                 Write-Host "    Current config:"
                 Write-Host "    type: $($s.statusLine.type)"
                 Write-Host "    command: $($s.statusLine.command)"
@@ -128,11 +128,11 @@ function Install-Hud {
             }
             Save-Settings $s
         } catch {
-            Write-Color "  ERROR: Failed to parse settings.local.json: $_" "Red"
+            Write-Color "  ERROR: Failed to parse settings.json: $_" "Red"
             exit 1
         }
     } else {
-        # Create new settings.local.json
+        # Create new settings.json
         $s = @{
             statusLine = @{
                 type = "command"
@@ -193,7 +193,7 @@ function Remove-Hud {
     Show-Banner
     Write-Color "This will:" "Yellow"
     Write-Host "  Delete: $TargetScript" -ForegroundColor Gray
-    Write-Host "  Remove statusLine from settings.local.json" -ForegroundColor Gray
+    Write-Host "  Remove statusLine from settings.json" -ForegroundColor Gray
     Write-Host ""
 
     $confirm = Read-Host "Confirm removal? (y/N)"
@@ -220,7 +220,7 @@ function Remove-Hud {
                 Write-Color "  OK: statusLine removed (backup: $backup)" "Green"
             }
         } catch {
-            Write-Color "  ERROR: Failed to update settings.local.json: $_" "Red"
+            Write-Color "  ERROR: Failed to update settings.json: $_" "Red"
         }
     }
 
